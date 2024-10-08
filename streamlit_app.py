@@ -7,6 +7,9 @@ st.set_page_config(page_title="Movies dataset", page_icon="🌱")
 st.title("🌱 Carbon Offset Registries dataset")
 st.write(
     """
+
+    *TESTING PUSH* 
+
     This app visualizes data from [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata).
     It shows which movie genre performed best at the box office over the years. Just 
     click on the widgets below to explore!
