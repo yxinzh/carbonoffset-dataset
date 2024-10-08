@@ -41,14 +41,14 @@ df = load_data()
 # df_reshaped = df_reshaped.sort_values(by="year", ascending=False)
 #
 #
-# # Display the data as a table using `st.dataframe`.
-# st.dataframe(
-#     df_reshaped,
-#     use_container_width=True,
-#     column_config={"year": st.column_config.TextColumn("Year")},
-# )
-#
-# # Display the data as an Altair chart using `st.altair_chart`.
+# Display the data as a table using `st.dataframe`.
+st.dataframe(
+    df,
+    use_container_width=True,
+    # column_config={"year": st.column_config.TextColumn("Year")},
+)
+
+# Display the data as an Altair chart using `st.altair_chart`.
 # df_chart = pd.melt(
 #     df_reshaped.reset_index(), id_vars="year", var_name="genre", value_name="gross"
 # )
