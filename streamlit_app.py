@@ -20,7 +20,7 @@ st.write(
 # reruns (e.g. if the user interacts with the widgets).
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/ACR_CSV.csv")
+    df = pd.read_csv("data/all_projects.csv")
     return df
 
 
