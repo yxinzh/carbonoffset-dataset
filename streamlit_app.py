@@ -3,7 +3,8 @@ import pandas as pd
 import streamlit as st
 #using template from steamline.io
 # Show the page title and description.
-st.set_page_config(page_title="Movies dataset", page_icon="🌱")
+st.set_page_config(page_title="Movies dataset",
+                   page_icon="🌱")
 st.title("🌱 Carbon Offset Aggregation")
 st.write(
     """
@@ -23,13 +24,26 @@ def load_data():
 
 df = load_data()
 
-#multiselect widget with the genres using `st.multiselect`.
-sdgs = st.multiselect(
-    "Sustainable Development Goals (SDG)",
-    df.genre.unique(),
-    ["Goal 1", "Goal 2", "Goal 3", "Goal 4", "Goal 5", "Goal 6", "Goal 7", "Goal 8", "Goal 9", "Goal 10",
-     "Goal 11", "Goal 12", "Goal 13", "Goal 14", "Goal 15", "Goal 16", "Goal 17"]
+#sidebar
+st.sidebar.header("Please Filter Here:")
+
+# sdgs = st.multiselect(
+#     "Sustainable Development Goals (SDG)",
+#     df.genre.unique(),
+#     ["Goal 1", "Goal 2", "Goal 3", "Goal 4", "Goal 5", "Goal 6", "Goal 7", "Goal 8", "Goal 9", "Goal 10",
+#      "Goal 11", "Goal 12", "Goal 13", "Goal 14", "Goal 15", "Goal 16", "Goal 17"]
+# )
+
+registry = st.sidebar.multiselect(
+    "Registry",
+    options=df["Registry"].unique(),
+    default=df["Registry"].unique()
 )
+
+df_selection = df.query(
+    "Registry == @registry"
+)
+
 
 # # Show a slider widget with the years using `st.slider`.
 # # years = st.slider("Years", 1986, 2006, (2000, 2016))
@@ -44,7 +58,7 @@ sdgs = st.multiselect(
 #
 # Display the data as a table using `st.dataframe`.
 st.dataframe(
-    df,
+    df_selection,
     use_container_width=True,
     # column_config={"year": st.column_config.TextColumn("Year")},
 )
