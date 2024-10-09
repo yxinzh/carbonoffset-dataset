@@ -1,6 +1,8 @@
 import altair as alt
 import pandas as pd
 import streamlit as st
+import re
+
 #using template from steamline.io
 # Show the page title and description.
 st.set_page_config(page_title="Movies dataset",
@@ -62,6 +64,31 @@ st.dataframe(
     use_container_width=True,
     # column_config={"year": st.column_config.TextColumn("Year")},
 )
+
+#sum sdg
+
+sdg_list = []
+sdg_dict = {}
+
+for v in range(df_selection['SDGs'].size):
+    text = df_selection['SDGs'].iloc[v]
+    pat = r'[1-9][1-9]*'
+    list = re.findall(pat,text)
+    list = [int(v) for v in list]
+    sdg_list.append(list)
+
+for v in range(len(sdg_list)):
+    for x in sdg_list[v]:
+        for key in range(len(sdg_dict)):
+            if x == key:
+                sdg_dict[key] += 1
+
+sdg_dict = {"Goal " + str(key): [value] for key, value in sdg_dict.items()}
+sdg_df = pd.DataFrame(sdg_dict)
+
+# stg_df = pd.read_csv("data/sdg.csv")
+#Bar Chart
+chart_data = sdg_df
 
 # Display the data as an Altair chart using `st.altair_chart`.
 # df_chart = pd.melt(
