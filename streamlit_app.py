@@ -4,7 +4,7 @@ import streamlit as st
 #using template from steamline.io
 # Show the page title and description.
 st.set_page_config(page_title="Movies dataset", page_icon="🌱")
-st.title("🌱 Carbon Offset Registries dataset")
+st.title("🌱 Carbon Offset Aggregation")
 st.write(
     """
 
@@ -23,12 +23,13 @@ def load_data():
 
 df = load_data()
 
-# Show a multiselect widget with the genres using `st.multiselect`.
-# genres = st.multiselect(
-#     "Genres",
-#     df.genre.unique(),
-#     ["Action", "Adventure", "Biography", "Comedy", "Drama", "Horror"],
-# )
+#multiselect widget with the genres using `st.multiselect`.
+sdgs = st.multiselect(
+    "Sustainable Development Goals (SDG)",
+    df.genre.unique(),
+    ["Goal 1", "Goal 2", "Goal 3", "Goal 4", "Goal 5", "Goal 6", "Goal 7", "Goal 8", "Goal 9", "Goal 10",
+     "Goal 11", "Goal 12", "Goal 13", "Goal 14", "Goal 15", "Goal 16", "Goal 17"]
+)
 
 # # Show a slider widget with the years using `st.slider`.
 # # years = st.slider("Years", 1986, 2006, (2000, 2016))
