@@ -8,11 +8,9 @@ st.title("🌱 Carbon Offset Registries dataset")
 st.write(
     """
 
-    *TESTING PUSH* 
-
-    This app visualizes data from [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata).
-    It shows which movie genre performed best at the box office over the years. Just 
-    click on the widgets below to explore!
+    This app aggregates and visualizes data from various Carbon Offset Registries.
+    Click on the widgets below to learn more about the projects and the United Nations Sustainable Development Goals (SDGs) they fulfill.
+    
     """
 )
 
@@ -22,7 +20,6 @@ st.write(
 def load_data():
     df = pd.read_csv("data/all_projects.csv")
     return df
-
 
 df = load_data()
 
