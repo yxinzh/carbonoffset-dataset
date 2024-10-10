@@ -29,11 +29,22 @@ df = load_data()
 #sidebar
 st.sidebar.header("Please Filter Here:")
 
-
-sdg_search = st.text_input("Search by SDG numbers", value="")
-sdg=df["SDGs"].contains(sdg_search)
+sdg_search = st.text_input("Search by SDG number (e.g., 1, 2, 3)", value="")
+# Check if there's any input
 if sdg_search:
-    st.write(sdg)
+    try:
+        # Filter rows where the list in the 'SDGs' column contains the search term
+        sdg_filtered = df[df["SDGs"].apply(lambda x: int(sdg_search) in x)]
+        
+        # Display filtered result
+        st.write(sdg_filtered)
+    
+    except ValueError:
+        st.write("Please enter a valid number.")
+else:
+    # Display full dataframe if no search input
+    st.write("No search input. Displaying full dataframe:")
+    st.write(df)
 
 # sdgs = st.multiselect(
 #     "Sustainable Development Goals (SDG)",
