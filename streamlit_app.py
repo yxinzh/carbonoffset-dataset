@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
+import ast
 
 #using template Movie Dataset from steamline.io
 #reference: Turn An Excel Sheet Into An Interactive Dashboard Using Python (Streamlit) by Coding Is Fun on YouTube
@@ -35,8 +36,9 @@ sdg_search = st.text_input("Search by SDG number (e.g., 1, 2, 3)", value="")
 # Check if there's any input
 if sdg_search:
     try:
+        df['SDGs'] = df['SDGs'].apply(ast.literal_eval)
         # Filter rows where the list in the 'SDGs' column contains the search term
-        sdg_filtered = df[sdg_search in df["SDGs"].values]
+        sdg_filtered = df[df["SDGs"].apply(lambda x: int(sdg_search) in x)]
 
         # Display filtered result
         st.write(sdg_filtered)
