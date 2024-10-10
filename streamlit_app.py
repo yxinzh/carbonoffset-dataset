@@ -10,12 +10,22 @@ st.set_page_config(page_title="Movies dataset",
 st.title("🌱 Carbon Offset Aggregation")
 st.write(
     """
-
+    hi
     This app aggregates and visualizes data from various Carbon Offset Registries.
     Click on the widgets below to learn more about the projects and the United Nations Sustainable Development Goals (SDGs) they fulfill.
     
     """
 )
+
+# Load the data from a CSV. We're caching this so it doesn't reload every time the app
+# reruns (e.g. if the user interacts with the widgets).
+@st.cache_data
+def load_data():
+    df = pd.read_csv("data/all_projects.csv")
+    return df
+
+df = load_data()
+
 
 sdg_search = st.text_input("Search by SDG number (e.g., 1, 2, 3)", value="")
 # Check if there's any input
@@ -33,15 +43,6 @@ else:
     # Display full dataframe if no search input
     st.write("No search input. Displaying full dataframe:")
     st.write(df)
-
-# Load the data from a CSV. We're caching this so it doesn't reload every time the app
-# reruns (e.g. if the user interacts with the widgets).
-@st.cache_data
-def load_data():
-    df = pd.read_csv("data/all_projects.csv")
-    return df
-
-df = load_data()
 
 #sidebar
 st.sidebar.header("Please Filter Here:")
