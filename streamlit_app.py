@@ -36,7 +36,7 @@ sdg_search = st.text_input("Search by SDG number (e.g., 1, 2, 3)", value="")
 if sdg_search:
     try:
         # Filter rows where the list in the 'SDGs' column contains the search term
-        sdg_filtered = df[df["SDGs"].apply(lambda x: int(sdg_search) in x)]
+        sdg_filtered = df[df["SDGs"].apply(lambda x: sdg_search in x)]
 
         # Display filtered result
         st.write(sdg_filtered)
