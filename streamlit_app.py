@@ -10,7 +10,7 @@ st.set_page_config(page_title="Movies dataset",
 st.title("🌱 Carbon Offset Aggregation")
 st.write(
     """
-    hi
+
     This app aggregates and visualizes data from various Carbon Offset Registries.
     Click on the widgets below to learn more about the projects and the United Nations Sustainable Development Goals (SDGs) they fulfill.
     
