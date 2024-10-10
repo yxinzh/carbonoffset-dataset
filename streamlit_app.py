@@ -17,18 +17,6 @@ st.write(
     """
 )
 
-# Load the data from a CSV. We're caching this so it doesn't reload every time the app
-# reruns (e.g. if the user interacts with the widgets).
-@st.cache_data
-def load_data():
-    df = pd.read_csv("data/all_projects.csv")
-    return df
-
-df = load_data()
-
-#sidebar
-st.sidebar.header("Please Filter Here:")
-
 sdg_search = st.text_input("Search by SDG number (e.g., 1, 2, 3)", value="")
 # Check if there's any input
 if sdg_search:
@@ -46,6 +34,17 @@ else:
     st.write("No search input. Displaying full dataframe:")
     st.write(df)
 
+# Load the data from a CSV. We're caching this so it doesn't reload every time the app
+# reruns (e.g. if the user interacts with the widgets).
+@st.cache_data
+def load_data():
+    df = pd.read_csv("data/all_projects.csv")
+    return df
+
+df = load_data()
+
+#sidebar
+st.sidebar.header("Please Filter Here:")
 # sdgs = st.multiselect(
 #     "Sustainable Development Goals (SDG)",
 #     df.genre.unique(),
