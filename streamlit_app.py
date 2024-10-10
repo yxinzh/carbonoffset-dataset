@@ -38,33 +38,25 @@ if sdg_search:
     try:
         df['SDGs'] = df['SDGs'].apply(ast.literal_eval)
         # Filter rows where the list in the 'SDGs' column contains the search term
-        sdg_filtered = df[df["SDGs"].apply(lambda x: int(sdg_search) in x)]
-
-        # Display filtered result
-        st.write(sdg_filtered)
+        df_filtered = df[df["SDGs"].apply(lambda x: int(sdg_search) in x)]
 
     except ValueError:
         st.write("Please enter a valid number.")
-# else:
-    # Display full dataframe if no search input
-    # st.write("No search input. Displaying full dataframe:")
-    # st.write(df)
-
-#sidebar filters
-
-registry = st.sidebar.multiselect(
-    "Registry",
-    options=df["Registry"].unique(),
-    default=df["Registry"].unique()
-)
+else:
+        df_filtered = df
 
 location = st.sidebar.multiselect(
     "Location",
-    options=df["Location"].unique(),
-    default="United States"
+    options=df_filtered["Location"].unique()
 )
 
-df_selection = df.query(
+registry = st.sidebar.multiselect(
+    "Registry",
+    options=df_filtered["Registry"].unique(),
+    default=df_filtered["Registry"].unique()
+)
+
+df_selection = df_filtered.query(
     "Registry == @registry & Location == @location"
 )
 
@@ -111,7 +103,8 @@ data_melted = data.melt(id_vars='Category', var_name='ValueType', value_name='Va
 chart = alt.Chart(data_melted).mark_bar().encode(
     x=alt.X('Value:Q', title='Count'),
     y=alt.Y('Category:N', title='Registry'),
-    color=alt.Color('ValueType:N', legend=alt.Legend(title="SDGs"))
+    color=alt.Color('ValueType:N', legend=alt.Legend(title="SDGs"),
+                    sort=[f'Goal {i}' for i in range(1, 18)])
 )
 
 # Display in Streamlit
@@ -123,4 +116,5 @@ st.title(':open_book: SDG Descriptions')
 st.dataframe(
     df_3.iloc[:, :3],
     use_container_width=True,
+    hide_index=True
 )
