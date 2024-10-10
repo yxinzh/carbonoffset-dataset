@@ -29,6 +29,12 @@ df = load_data()
 #sidebar
 st.sidebar.header("Please Filter Here:")
 
+
+sdg_search = st.text_input("Search by SDG numbers", value="")
+sdg=df["SDGs"].contains(sdg_search)
+if sdg_search:
+    st.write(sdg)
+
 # sdgs = st.multiselect(
 #     "Sustainable Development Goals (SDG)",
 #     df.genre.unique(),
