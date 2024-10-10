@@ -1,13 +1,16 @@
-import altair as alt
 import pandas as pd
 import streamlit as st
-import re
+import altair as alt
+import numpy as np
 
-#using template from steamline.io
+#using template Movie Dataset from steamline.io
+#reference: Turn An Excel Sheet Into An Interactive Dashboard Using Python (Streamlit) by Coding Is Fun on YouTube
+#https://www.youtube.com/watch?v=Sb0A9i6d320&t=616s
+
 # Show the page title and description.
-st.set_page_config(page_title="Movies dataset",
+st.set_page_config(page_title="Carbon Offset Aggregator",
                    page_icon="🌱")
-st.title("🌱 Carbon Offset Aggregation")
+st.title("🌱 Carbon Offset Aggregator")
 st.write(
     """
 
@@ -20,21 +23,15 @@ st.write(
 # Load the data from a CSV. We're caching this so it doesn't reload every time the app
 # reruns (e.g. if the user interacts with the widgets).
 @st.cache_data
-def load_data():
-    df = pd.read_csv("data/all_projects.csv")
+def load_data(file):
+    df = pd.read_csv(file)
     return df
 
-df = load_data()
+df = load_data("data/all_projects.csv")
+df_2 = load_data("data/sdg_counts.csv")
+df_3 = load_data('data/sdg.csv')
 
-#sidebar
-st.sidebar.header("Please Filter Here:")
-
-# sdgs = st.multiselect(
-#     "Sustainable Development Goals (SDG)",
-#     df.genre.unique(),
-#     ["Goal 1", "Goal 2", "Goal 3", "Goal 4", "Goal 5", "Goal 6", "Goal 7", "Goal 8", "Goal 9", "Goal 10",
-#      "Goal 11", "Goal 12", "Goal 13", "Goal 14", "Goal 15", "Goal 16", "Goal 17"]
-# )
+#sidebar filters
 
 registry = st.sidebar.multiselect(
     "Registry",
@@ -42,7 +39,17 @@ registry = st.sidebar.multiselect(
     default=df["Registry"].unique()
 )
 
+location = st.sidebar.multiselect(
+    "Location",
+    options=df["Location"].unique(),
+    default="United States"
+)
+
 df_selection = df.query(
+    "Registry == @registry & Location == @location"
+)
+
+df_2_selection = df_2.query(
     "Registry == @registry"
 )
 
@@ -50,21 +57,54 @@ df_selection = df.query(
 st.dataframe(
     df_selection,
     use_container_width=True,
-    # column_config={"year": st.column_config.TextColumn("Year")},
 )
 
-# Display the data as an Altair chart using `st.altair_chart`.
-# df_chart = pd.melt(
-#     df_reshaped.reset_index(), id_vars="year", var_name="genre", value_name="gross"
-# )
-# chart = (
-#     alt.Chart(df_chart)
-#     .mark_line()
-#     .encode(
-#         x=alt.X("year:N", title="Year"),
-#         y=alt.Y("gross:Q", title="Gross earnings ($)"),
-#         color="genre:N",
-#     )
-#     .properties(height=320)
-# )
-# st.altair_chart(chart, use_container_width=True)
+#chart
+st.title(":bar_chart: SDG Distribution")
+st.markdown("##")
+
+# Altair Chart Code Reference: ChatGPT
+data = pd.DataFrame({
+    'Category': df_2_selection.iloc[:, 0].values,
+    'Goal 1': df_2_selection.iloc[:, 1].values,
+    'Goal 2': df_2_selection.iloc[:, 2].values,
+    'Goal 3': df_2_selection.iloc[:, 3].values,
+    'Goal 4': df_2_selection.iloc[:, 4].values,
+    'Goal 5': df_2_selection.iloc[:, 5].values,
+    'Goal 6': df_2_selection.iloc[:, 6].values,
+    'Goal 7': df_2_selection.iloc[:, 7].values,
+    'Goal 8': df_2_selection.iloc[:, 8].values,
+    'Goal 9': df_2_selection.iloc[:, 9].values,
+    'Goal 10': df_2_selection.iloc[:, 10].values,
+    'Goal 11': df_2_selection.iloc[:, 11].values,
+    'Goal 12': df_2_selection.iloc[:, 12].values,
+    'Goal 13': df_2_selection.iloc[:, 13].values,
+    'Goal 14': df_2_selection.iloc[:, 14].values,
+    'Goal 15': df_2_selection.iloc[:, 15].values,
+    'Goal 16': df_2_selection.iloc[:, 16].values,
+    'Goal 17': df_2_selection.iloc[:, 17].values,
+})
+
+# Melt the DataFrame to get values stacked
+data_melted = data.melt(id_vars='Category', var_name='ValueType', value_name='Value')
+
+# Create a layered horizontal bar chart
+chart = alt.Chart(data_melted).mark_bar().encode(
+    x=alt.X('Value:Q', title='Count'),
+    y=alt.Y('Category:N', title='Registry'),
+    color=alt.Color('ValueType:N', legend=alt.Legend(title="SDGs"))
+)
+
+# Display in Streamlit
+st.altair_chart(chart, use_container_width=True)
+
+# Show SDG Details
+st.title(':open_book: SDG Descriptions')
+
+st.dataframe(
+    df_3.iloc[:, :3],
+    use_container_width=True,
+)
+
+
+
