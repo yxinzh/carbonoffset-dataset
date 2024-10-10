@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
-import numpy as np
 
 #using template Movie Dataset from steamline.io
 #reference: Turn An Excel Sheet Into An Interactive Dashboard Using Python (Streamlit) by Coding Is Fun on YouTube
@@ -30,6 +29,24 @@ def load_data(file):
 df = load_data("data/all_projects.csv")
 df_2 = load_data("data/sdg_counts.csv")
 df_3 = load_data('data/sdg.csv')
+
+#searchbar
+sdg_search = st.text_input("Search by SDG number (e.g., 1, 2, 3)", value="")
+# Check if there's any input
+if sdg_search:
+    try:
+        # Filter rows where the list in the 'SDGs' column contains the search term
+        sdg_filtered = df[df["SDGs"].apply(lambda x: int(sdg_search) in x)]
+
+        # Display filtered result
+        st.write(sdg_filtered)
+
+    except ValueError:
+        st.write("Please enter a valid number.")
+# else:
+    # Display full dataframe if no search input
+    # st.write("No search input. Displaying full dataframe:")
+    # st.write(df)
 
 #sidebar filters
 
