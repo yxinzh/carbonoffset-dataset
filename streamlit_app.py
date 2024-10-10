@@ -124,6 +124,3 @@ st.dataframe(
     df_3.iloc[:, :3],
     use_container_width=True,
 )
-
-
-
